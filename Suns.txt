@@ -1,0 +1,125 @@
+<html>
+
+<head>
+     <meta charset="utf-8">
+     <title>Evelīnas tīmekļa lapa</title>
+</head>
+
+<body>
+     <!-- HTML canvas -->
+     <canvas id="canvas1" width='400px' height='400px'></canvas>
+
+     <!-- JavaScript funkcijas -->
+     <script>
+
+          // ielade zīmējumu
+          function loadImages(files, callbackAllFilesLoaded)
+          {
+               // saskaita failu dauzdumu 
+               var countFilesToLoad = 0;
+               for (var fileId in files)
+               {
+                    countFilesToLoad++;
+               }
+
+               var images = {};
+               for (var fileId in files)
+               {
+                    // tukša bilde
+                    images[fileId] = new Image();
+
+                    // событие onload
+                    images[fileId].onload = function()
+                    {
+                         // когда все файлы загрузились, вызываем нашу функцию callbackAllFilesLoaded чтобы нарисовать картинку
+                         if ( --countFilesToLoad <= 0 )
+                         {
+                              callbackAllFilesLoaded(images);
+                         }
+                    };
+
+                    // загружаем картинку
+                    images[fileId].src = files[fileId];
+               }
+          }
+
+          function AnimationInit()
+          {
+               window.requestAnimFrame = (function(callback) {
+                    return window.requestAnimationFrame ||
+                         window.webkitRequestAnimationFrame ||
+                         window.mozRequestAnimationFrame ||
+                         window.oRequestAnimationFrame ||
+                         window.msRequestAnimationFrame ||
+                         function(callback)
+                         {
+                              window.setTimeout(callback, 1000 / 60); // 60 time in 1 second (1000 ms)
+                         };
+               })();
+          }
+
+     </script>
+
+     <!-- главный код -->
+     <script>
+          function MyAnimation(context, canvas, loadedImages, data)
+          {
+               <!-- очищаем все на canvas -->
+               context.clearRect(0, 0, canvas.width, canvas.height);
+         
+               // рисуем часть картинки по позиции x,y
+               const rect = data.spriteOffsets[Math.trunc(data.spriteIndex) % data.spriteOffsets.length ];
+               context.drawImage(loadedImages.tree, rect.x, rect.y, rect.width, rect.height, data.xPos, data.yPos, rect.width, rect.height);
+
+               // следующий sprite индекс
+               data.spriteIndex += 0.15;
+
+               // меняем позицию картинки
+               data.xPos = data.xPos>410 ? 0 : data.xPos + 1.3;
+         
+               // request new frame
+               requestAnimFrame(function(){
+                    MyAnimation(context, canvas, loadedImages, data);
+               });
+          }
+
+          <!-- файл -->
+          var files = {
+               tree : "./dog_run.png"
+          };
+         
+          <!-- context для рисования -->
+          var canvas = document.getElementById('canvas1');
+          var context = canvas.getContext('2d');
+
+          <!-- загружаем картинки -->
+          loadImages(files, function (loadedImages)
+          {
+               <!-- инициализация анимации -->
+               AnimationInit();
+
+               <!-- данные для перемещения -->
+               var spriteOffsets = [
+                    {x:244, y:3, width:57, height:42},
+                    {x:304, y:4, width:54, height:39},
+                    {x:363, y:4, width:57, height:38},
+                    {x:420, y:1, width:55, height:40},
+                    {x:483, y:4, width:57, height:36},
+                    {x:542, y:4, width:57, height:38}
+               ];
+
+               var data = {
+                    xPos: 0,
+                    yPos: 20,
+                    spriteIndex : 0,
+                    spriteOffsets: spriteOffsets
+               };
+
+               <!-- запускаем бесконечную анимацию -->
+               MyAnimation(context, canvas, loadedImages, data);
+          });
+
+     </script>
+</body>
+
+</html>

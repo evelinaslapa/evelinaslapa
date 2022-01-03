@@ -1,0 +1,65 @@
+<html>
+
+ <head>
+  <title>Evelīnas tīmekļa lapa</title>
+<style> 
+	header, footer { clear: left; color: DarkOliveGreen; background-color: PaleTurquoise; text-align: center; width: 1500px;}
+ 	p { color: black; font-size: 19px}
+	border { float:left; background-color: Lavender; padding: 10px; width: 250px; }
+	article {float:left; padding: 10px; width: 800px;}
+</style>
+</head>
+
+ <body bgcolor=AliceBlue>
+  <header><h1>SVG un poga</h1></header>
+
+<border>
+<p><a href="Funkcijas_grafiks.html">Funkcijas grafiks</a></p>
+<p><a href="Spikeris.html">Noderīgs špikeris</a></p>
+<p><a href="Grafikuparveidosana.html">Funkciju grafiku pārveidošana</a></p>
+<p><a href="Suns.html">Jauks kucēns garastāvokļa uzlabošanai</a></p>
+<p><a href="SVG.html">SVG un poga</a></p>
+</border>
+
+
+<p>
+<svg>
+<style>
+	.mazi {font : bold 18px sans-serif; fill : SeaGreen}
+	.videji {font : italic 34px sans-serif; }
+	.lieli {font : bold 44px monospace; fill : DarkOliveGreen}
+</style>
+  <text x="80" y="105" class="mazi"> Tas ir </text>
+  <text x="130" y="110" class="videji"> darbs ar </text>
+  <text x="110" y="145" class="lieli"> SVG! </text>
+</svg>
+</p>
+
+
+<p>
+<svg>
+   <defs>
+   <path id="path1" d="M100, 20, a1, 1, 0 0, 0 100, 0" />
+</defs>
+<text x="5" y="200" style="font : italic 14px monospace; fill : DarkOliveGreen">
+	<textPath xlink:href="#path1"> Tas ir darbs ar SVG! </textPath>
+</text>
+</svg>
+</p>
+
+
+<p>
+ <form>
+   <article>
+   <p><b>Kāds Jums ir garastāvokļis?</b></p>
+    <p><input name="gs" type="radio" value="super"> Superīgs</p>
+    <p><input name="gs" type="radio" value="jautrs"> Jautrs</p>
+    <p><input name="gs" type="radio" value="pdzen" checked> Ļoti labs</p>
+    <p><input type="submit" value="Izvēlēties"></p>
+   </article>
+ </form> 
+</p>
+
+<footer>Tas ir viss. Jauku dienu!</footer>
+</body>
+</html>

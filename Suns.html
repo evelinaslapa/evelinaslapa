@@ -1,0 +1,135 @@
+<html>
+
+<head>
+     <meta charset="utf-8">
+     <title>Evelīnas tīmekļa lapa</title>
+<style>
+	h1 {color: DarkOliveGreen; font-family: consolas;}
+	p { color: black; font-size: 19px; width: 80%; }
+	header, footer { clear: left; color: DarkOliveGreen; background-color: PaleTurquoise; text-align: center; width: 1500px;}
+	article {float:left; padding: 10px; width: 800px;}
+	border { float:left; background-color: Lavender; padding: 10px; width: 250px; }
+  </style>
+</head>
+
+<body bgcolor=AliceBlue>
+
+  <header><h1>Jauks kucēns garastāvokļa uzlabošanai.</h1></header>
+
+<border>
+<p><a href="Funkcijas_grafiks.html">Funkcijas grafiks</a></p>
+<p><a href="Spikeris.html">Noderīgs špikeris</a></p>
+<p><a href="Grafikuparveidosana.html">Funkciju grafiku pārveidošana</a></p>
+<p><a href="Suns.html">Jauks kucēns garastāvokļa uzlabošanai</a></p>
+<p><a href="SVG.html">SVG un poga</a></p>
+</border>
+
+     <!-- HTML canvas -->
+     <canvas id="canvas1" width='800px' height='400px'></canvas>
+
+     <!-- JavaScript funkcijas -->
+     <script>
+
+          // ielade zīmējumu
+          function loadImages(files, callbackAllFilesLoaded)
+          {
+               // saskaita failu dauzdumu 
+               var countFilesToLoad = 0;
+               for (var fileId in files)
+               {countFilesToLoad++;}
+
+               var images = {};
+               for (var fileId in files)
+               {
+                    // tukša bilde
+                    images[fileId] = new Image();
+
+                    // notikums onload
+                    images[fileId].onload = function()
+                    {
+                         // kad visi faili ir gatavi, izsauc funkciju callbackAllFilesLoaded, lai uzzīmētu bildi
+                         if ( --countFilesToLoad <= 0 )
+                         { callbackAllFilesLoaded(images);}
+                    };
+
+                    // ielade bildi
+                    images[fileId].src = files[fileId];
+               }
+          }
+
+          function AnimationInit()
+          {
+               window.requestAnimFrame = (function(callback) {
+                    return window.requestAnimationFrame ||
+                         window.webkitRequestAnimationFrame ||
+                         window.mozRequestAnimationFrame ||
+                         window.oRequestAnimationFrame ||
+                         window.msRequestAnimationFrame ||
+                         function(callback)
+                         {
+                              window.setTimeout(callback, 1000 / 60); // 60 time in 1 second (1000 ms)
+                         };
+               })();
+          }
+
+     </script>
+
+     <!-- Galvenais kods -->
+     <script>
+          function MyAnimation(context, canvas, loadedImages, data)
+          {
+               <!-- iztīra visas kanvas -->
+               context.clearRect(0, 0, canvas.width, canvas.height);
+         
+               // zīmē bildi pozīcijā x,y
+               const rect = data.spriteOffsets[Math.trunc(data.spriteIndex) % data.spriteOffsets.length ];
+               context.drawImage(loadedImages.tree, rect.x, rect.y, rect.width, rect.height, data.xPos, data.yPos, rect.width, rect.height);
+
+               // nākamais sprite indekss
+               data.spriteIndex += 0.15;
+
+               // mainā bildes pozīciju
+               data.xPos = data.xPos>410 ? 0 : data.xPos + 1.3;
+         
+               // request new frame
+               requestAnimFrame(function(){
+                    MyAnimation(context, canvas, loadedImages, data);
+               });
+          }
+
+          <!-- Fails ar suni -->
+          var files = {tree : "./dog_run.png"};
+         
+          <!-- context zīmēšanai -->
+          var canvas = document.getElementById('canvas1');
+          var context = canvas.getContext('2d');
+
+          <!-- ielade zīmējumus -->
+          loadImages(files, function (loadedImages)
+          {
+               <!-- aktivizē animāciju -->
+               AnimationInit();
+
+               <!-- dati bildes pārvietošanai -->
+               var spriteOffsets = [
+                    {x:244, y:3, width:57, height:42},
+                    {x:304, y:4, width:54, height:39},
+                    {x:363, y:4, width:57, height:38},
+                    {x:420, y:1, width:55, height:40},
+                    {x:483, y:4, width:57, height:36},
+                    {x:542, y:4, width:57, height:38}
+               ];
+
+               var data = { xPos: 0, yPos: 20, spriteIndex : 0, spriteOffsets: spriteOffsets };
+
+               <!-- bezgalīga animācija -->
+               MyAnimation(context, canvas, loadedImages, data);
+          });
+
+     </script>
+<p>Animācija ir veidota no šīs bildes :</p>
+<img src="dog_run.png">
+<footer>Tas ir viss. Jauku dienu!</footer>
+</body>
+
+</html>
